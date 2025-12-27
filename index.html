@@ -5,140 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Typing Test</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #111827;
-  color: #9ca3af;
-  font-family: 'Roboto Mono', monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  * { box-sizing: border-box; }
 
-.container {
-  display: flex;
-  gap: 60px;
-  width: 90%;
-  max-width: 1200px;
-}
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: #e5e7eb;
+    font-family: 'Roboto Mono', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.left-col {
-  flex: 2;
-}
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    width: 90%;
+    max-width: 1200px;
+  }
 
-.right-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+  .left-col {
+    flex: 2;
+    min-width: 300px;
+  }
 
-#title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #3b82f6;
-  margin-bottom: 20px;
-}
+  .right-col {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
 
-#text-to-type {
-  font-size: 1.6rem;
-  line-height: 1.5;
-  color: #4b5563;
-  margin-bottom: 25px;
-  user-select: none;
-}
+  #title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3b82f6;
+    margin-bottom: 20px;
+  }
 
-.correct {
-  color: #10b981;
-}
+  #text-to-type {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: #9ca3af;
+    margin-bottom: 25px;
+    user-select: none;
+    min-height: 150px;
+    padding: 15px;
+    background: #1f2937;
+    border-radius: 8px;
+  }
 
-.incorrect {
-  color: #ef4444;
-  text-decoration: underline;
-}
+  .correct { color: #10b981; }
+  .incorrect { color: #ef4444; text-decoration: underline; }
 
-#typing-input {
-  width: 100%;
-  padding: 12px;
-  font-size: 1.4rem;
-  background: #1f2937;
-  border: 2px solid #374151;
-  border-radius: 6px;
-  color: #f3f4f6;
-  outline: none;
-}
+  #typing-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.2rem;
+    background: #1f2937;
+    border: 2px solid #374151;
+    border-radius: 8px;
+    color: #f3f4f6;
+    outline: none;
+    transition: border 0.2s;
+  }
 
-#typing-input:focus {
-  border-color: #3b82f6;
-}
+  #typing-input:focus { border-color: #3b82f6; }
+  #typing-input:disabled { background: #111827; color: #6b7280; }
 
-#typing-input:disabled {
-  background: #111827;
-  color: #6b7280;
-}
+  .stats-container {
+    background: #1f2937;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+  }
 
-.stats-container {
-  background: #1f2937;
-  padding: 20px;
-  border-radius: 6px;
-  border: 1px solid #374151;
-}
+  .stats-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
 
-.stats-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
+  .stat-label { font-size: 0.9rem; color: #9ca3af; }
+  .stat-val { font-size: 1.5rem; font-weight: 700; color: #3b82f6; }
+  #high-score { color: #facc15; }
 
-.stat-label {
-  font-size: 0.9rem;
-}
+  button {
+    margin-top: 12px;
+    padding: 12px;
+    width: 100%;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
 
-.stat-val {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #3b82f6;
-}
+  button:hover { background: #2563eb; }
 
-#high-score {
-  color: #eab308;
-}
-
-button {
-  margin-top: 10px;
-  padding: 12px;
-  width: 100%;
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1rem;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #2563eb;
-}
-
-h3 {
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-  color: #9ca3af;
-}
-
-canvas {
-  width: 100%;
-  background: #1f2937;
-  border: 1px solid #374151;
-  border-radius: 6px;
-}
+  h3 { font-size: 0.9rem; margin-bottom: 8px; color: #9ca3af; }
+  canvas { background: #1f2937; border-radius: 6px; }
 </style>
 </head>
 
@@ -149,54 +128,36 @@ canvas {
   <div class="left-col">
     <div id="title">Typing Test</div>
     <div id="text-to-type"></div>
-    <input
-      id="typing-input"
-      placeholder="Start typing..."
-      autocomplete="off"
-      spellcheck="false"
-    >
+    <input id="typing-input" placeholder="Start typing..." autocomplete="off" spellcheck="false">
   </div>
 
   <div class="right-col">
 
     <div class="stats-container">
-      <div class="stats-row">
-        <span class="stat-label">WPM</span>
-        <span class="stat-val" id="wpm">0</span>
-      </div>
-
-      <div class="stats-row">
-        <span class="stat-label">Accuracy</span>
-        <span class="stat-val" id="accuracy">0%</span>
-      </div>
-
+      <div class="stats-row"><span class="stat-label">WPM</span><span class="stat-val" id="wpm">0</span></div>
+      <div class="stats-row"><span class="stat-label">Accuracy</span><span class="stat-val" id="accuracy">0%</span></div>
       <div class="stats-row" style="border-top:1px solid #374151; padding-top:10px;">
-        <span class="stat-label">Best</span>
-        <span class="stat-val" id="high-score">0</span>
+        <span class="stat-label">Best</span><span class="stat-val" id="high-score">0</span>
       </div>
-
       <button id="downloadCSV">Download CSV</button>
     </div>
 
     <div>
       <h3>Speed</h3>
-      <canvas id="speedChart" width="300" height="150"></canvas>
+      <canvas id="speedChart"></canvas>
     </div>
 
     <div>
       <h3>Accuracy</h3>
-      <canvas id="accuracyChart" width="300" height="150"></canvas>
+      <canvas id="accuracyChart"></canvas>
     </div>
 
   </div>
 </div>
 
 <script src="words.js"></script>
-
 <script>
-/* ---------- SETUP ---------- */
-
-const wordList = (typeof words !== "undefined") ? words : ["hello", "world", "typing", "test"];
+const wordList = (typeof words !== "undefined") ? words : ["hello","world","typing","test"];
 const textDisplay = document.getElementById("text-to-type");
 const input = document.getElementById("typing-input");
 
@@ -204,132 +165,83 @@ const wpmEl = document.getElementById("wpm");
 const accEl = document.getElementById("accuracy");
 const bestEl = document.getElementById("high-score");
 
-const speedCtx = document.getElementById("speedChart").getContext("2d");
-const accCtx = document.getElementById("accuracyChart").getContext("2d");
-
-let bestWpm = localStorage.getItem("bestWpm") || 0;
+let bestWpm = parseInt(localStorage.getItem("bestWpm") || 0);
 bestEl.textContent = bestWpm;
 
-/* ---------- GENERATE TEXT ---------- */
+// Generate text
+const targetText = Array.from({length:50}, () => wordList[Math.floor(Math.random()*wordList.length)]).join(" ");
+targetText.split("").forEach(c => { let span = document.createElement("span"); span.textContent = c; textDisplay.appendChild(span); });
 
-let targetText = "";
-
-for (let i = 0; i < 50; i++) {
-  targetText += wordList[Math.floor(Math.random() * wordList.length)] + " ";
-}
-
-targetText = targetText.trim();
-
-targetText.split("").forEach(char => {
-  const span = document.createElement("span");
-  span.textContent = char;
-  textDisplay.appendChild(span);
-});
-
-/* ---------- TYPING LOGIC ---------- */
-
-let startTime = null;
-let timer = null;
-let finished = false;
-let history = [];
+let startTime = null, finished = false, history = [];
 
 input.addEventListener("input", () => {
-  if (!startTime) {
-    startTime = new Date();
-    timer = setInterval(updateStats, 500);
-  }
-
+  if (!startTime) startTime = new Date();
   const typed = input.value;
   const spans = textDisplay.querySelectorAll("span");
 
   let correctCount = 0;
-
-  spans.forEach((span, i) => {
-    if (i < typed.length) {
-      if (typed[i] === targetText[i]) {
-        span.className = "correct";
-        correctCount++;
-      } else {
-        span.className = "incorrect";
-      }
-    } else {
-      span.className = "";
-    }
+  spans.forEach((span,i)=>{
+    if(i<typed.length){span.className = typed[i]===targetText[i]?"correct":"incorrect";if(typed[i]===targetText[i]) correctCount++;}
+    else span.className="";
   });
 
-  if (typed.length >= targetText.length && !finished) {
-    finished = true;
-    clearInterval(timer);
-    input.disabled = true;
+  if(typed.length>=targetText.length && !finished){
+    finished=true;
+    input.disabled=true;
     updateStats();
   }
+  updateStats();
 });
 
-/* ---------- STATS ---------- */
+function updateStats(){
+  if(!startTime) return;
+  const typed=input.value;
+  const elapsedMin=(new Date()-startTime)/60000;
+  if(elapsedMin<=0) return;
 
-function updateStats() {
-  const typed = input.value;
-  const elapsedMin = (new Date() - startTime) / 60000;
-
-  if (elapsedMin <= 0) return;
-
-  const wpm = Math.round((typed.length / 5) / elapsedMin);
-
-  let correct = 0;
-  for (let i = 0; i < typed.length; i++) {
-    if (typed[i] === targetText[i]) correct++;
-  }
-
-  const accuracy = typed.length === 0 ? 0 : Math.round((correct / typed.length) * 100);
+  const wpm = Math.round(typed.length/5/elapsedMin);
+  const correct = typed.split("").filter((c,i)=>c===targetText[i]).length;
+  const accuracy = typed.length?Math.round(correct/typed.length*100):0;
 
   wpmEl.textContent = wpm;
-  accEl.textContent = accuracy + "%";
+  accEl.textContent = accuracy+"%";
 
-  history.push({ wpm, accuracy });
+  history.push({wpm,accuracy});
 
-  drawChart(speedCtx, history.map(d => d.wpm), "#3b82f6");
-  drawChart(accCtx, history.map(d => d.accuracy), "#10b981");
-
-  if (finished && wpm > bestWpm) {
-    bestWpm = wpm;
-    localStorage.setItem("bestWpm", bestWpm);
-    bestEl.textContent = bestWpm;
+  if(finished && wpm>bestWpm){
+    bestWpm=wpm;
+    localStorage.setItem("bestWpm",bestWpm);
+    bestEl.textContent=bestWpm;
   }
+
+  speedChart.data.labels = history.map((_,i)=>i);
+  speedChart.data.datasets[0].data = history.map(d=>d.wpm);
+  accChart.data.labels = history.map((_,i)=>i);
+  accChart.data.datasets[0].data = history.map(d=>d.accuracy);
+  speedChart.update();
+  accChart.update();
 }
 
-/* ---------- CHART ---------- */
+// Chart.js
+const speedChart = new Chart(document.getElementById('speedChart'), {
+  type:'line',
+  data:{labels:[], datasets:[{label:'WPM',data:[],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true,tension:0.3}]},
+  options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}
+});
+const accChart = new Chart(document.getElementById('accuracyChart'), {
+  type:'line',
+  data:{labels:[], datasets:[{label:'Accuracy',data:[],borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.2)',fill:true,tension:0.3}]},
+  options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100}}}
+});
 
-function drawChart(ctx, values, color) {
-  ctx.clearRect(0, 0, 300, 150);
-  ctx.beginPath();
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 2;
-
-  const max = Math.max(...values, 10);
-  const recent = values.slice(-50);
-
-  recent.forEach((val, i) => {
-    const x = i * (300 / 50);
-    const y = 150 - (val / max) * 140;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-
-  ctx.stroke();
-}
-
-/* ---------- CSV ---------- */
-
+// CSV download
 document.getElementById("downloadCSV").onclick = () => {
-  let csv = "Time,WPM,Accuracy\n";
-  history.forEach((d, i) => {
-    csv += `${i * 0.5},${d.wpm},${d.accuracy}\n`;
-  });
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "typing_results.csv";
+  let csv="Time,WPM,Accuracy\n";
+  history.forEach((d,i)=>{csv+=`${i*0.5},${d.wpm},${d.accuracy}\n`;});
+  const blob=new Blob([csv],{type:"text/csv"});
+  const link=document.createElement("a");
+  link.href=URL.createObjectURL(blob);
+  link.download="typing_results.csv";
   link.click();
 };
 </script>
