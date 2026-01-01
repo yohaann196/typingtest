@@ -5,15 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Typing Test</title>
 
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
   * { box-sizing: border-box; }
-
   body {
     margin: 0;
     min-height: 100vh;
@@ -24,105 +20,29 @@
     justify-content: center;
     align-items: center;
   }
-
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    width: 90%;
-    max-width: 1200px;
-  }
-
-  .left-col {
-    flex: 2;
-    min-width: 300px;
-  }
-
-  .right-col {
-    flex: 1;
-    min-width: 250px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  }
-
-  #title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #3b82f6;
-    margin-bottom: 20px;
-  }
-
-  #text-to-type {
-    font-size: 1.6rem;
-    line-height: 1.6;
-    color: #9ca3af;
-    margin-bottom: 25px;
-    user-select: none;
-    min-height: 150px;
-    padding: 15px;
-    background: #1f2937;
-    border-radius: 8px;
-  }
-
+  .container { display: flex; flex-wrap: wrap; gap: 40px; width: 90%; max-width: 1200px; }
+  .left-col { flex: 2; min-width: 300px; }
+  .right-col { flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 25px; }
+  #title { font-size: 2rem; font-weight: 700; color: #3b82f6; margin-bottom: 20px; }
+  #text-to-type { font-size: 1.6rem; line-height: 1.6; color: #9ca3af; margin-bottom: 25px; user-select: none; min-height: 150px; padding: 15px; background: #1f2937; border-radius: 8px; }
   .correct { color: #10b981; }
   .incorrect { color: #ef4444; text-decoration: underline; }
-
-  #typing-input {
-    width: 100%;
-    padding: 14px;
-    font-size: 1.2rem;
-    background: #1f2937;
-    border: 2px solid #374151;
-    border-radius: 8px;
-    color: #f3f4f6;
-    outline: none;
-    transition: border 0.2s;
-  }
-
+  #typing-input { width: 100%; padding: 14px; font-size: 1.2rem; background: #1f2937; border: 2px solid #374151; border-radius: 8px; color: #f3f4f6; outline: none; transition: border 0.2s; }
   #typing-input:focus { border-color: #3b82f6; }
   #typing-input:disabled { background: #111827; color: #6b7280; }
-
-  .stats-container {
-    background: #1f2937;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #374151;
-  }
-
-  .stats-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-
+  .stats-container { background: #1f2937; padding: 20px; border-radius: 8px; border: 1px solid #374151; }
+  .stats-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
   .stat-label { font-size: 0.9rem; color: #9ca3af; }
   .stat-val { font-size: 1.5rem; font-weight: 700; color: #3b82f6; }
   #high-score { color: #facc15; }
-
-  button {
-    margin-top: 12px;
-    padding: 12px;
-    width: 100%;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1rem;
-    background: #3b82f6;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
+  button { margin-top: 12px; padding: 12px; width: 100%; font-family: 'Roboto Mono', monospace; font-size: 1rem; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
   button:hover { background: #2563eb; }
-
   h3 { font-size: 0.9rem; margin-bottom: 8px; color: #9ca3af; }
   canvas { background: #1f2937; border-radius: 6px; }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
   <div class="left-col">
@@ -132,7 +52,6 @@
   </div>
 
   <div class="right-col">
-
     <div class="stats-container">
       <div class="stats-row"><span class="stat-label">WPM</span><span class="stat-val" id="wpm">0</span></div>
       <div class="stats-row"><span class="stat-label">Accuracy</span><span class="stat-val" id="accuracy">0%</span></div>
@@ -168,7 +87,6 @@ const bestEl = document.getElementById("high-score");
 let bestWpm = parseInt(localStorage.getItem("bestWpm") || 0);
 bestEl.textContent = bestWpm;
 
-// Generate text
 const targetText = Array.from({length:50}, () => wordList[Math.floor(Math.random()*wordList.length)]).join(" ");
 targetText.split("").forEach(c => { let span = document.createElement("span"); span.textContent = c; textDisplay.appendChild(span); });
 
@@ -181,48 +99,40 @@ input.addEventListener("input", () => {
 
   let correctCount = 0;
   spans.forEach((span,i)=>{
-    if(i<typed.length){span.className = typed[i]===targetText[i]?"correct":"incorrect";if(typed[i]===targetText[i]) correctCount++;}
+    if(i<typed.length){span.className = typed[i]===targetText[i]?"correct":"incorrect"; if(typed[i]===targetText[i]) correctCount++;}
     else span.className="";
   });
 
-  if(typed.length>=targetText.length && !finished){
-    finished=true;
-    input.disabled=true;
-    updateStats();
-  }
+  if(typed.length>=targetText.length && !finished){finished=true; input.disabled=true; updateStats(true);}
   updateStats();
 });
 
-function updateStats(){
+function updateStats(force=false){
   if(!startTime) return;
-  const typed=input.value;
+  const typed = input.value;
   const elapsedMin=(new Date()-startTime)/60000;
-  if(elapsedMin<=0) return;
+  if(elapsedMin<=0.05 && !force) return;
 
   const wpm = Math.round(typed.length/5/elapsedMin);
   const correct = typed.split("").filter((c,i)=>c===targetText[i]).length;
   const accuracy = typed.length?Math.round(correct/typed.length*100):0;
 
-  wpmEl.textContent = wpm;
-  accEl.textContent = accuracy+"%";
+  wpmEl.textContent=wpm;
+  accEl.textContent=accuracy+"%";
 
-  history.push({wpm,accuracy});
-
-  if(finished && wpm>bestWpm){
-    bestWpm=wpm;
-    localStorage.setItem("bestWpm",bestWpm);
-    bestEl.textContent=bestWpm;
+  if(force || elapsedMin>=0.05){
+    history.push({wpm,accuracy});
+    speedChart.data.labels=history.map((_,i)=>i);
+    speedChart.data.datasets[0].data=history.map(d=>d.wpm);
+    accChart.data.labels=history.map((_,i)=>i);
+    accChart.data.datasets[0].data=history.map(d=>d.accuracy);
+    speedChart.update();
+    accChart.update();
   }
 
-  speedChart.data.labels = history.map((_,i)=>i);
-  speedChart.data.datasets[0].data = history.map(d=>d.wpm);
-  accChart.data.labels = history.map((_,i)=>i);
-  accChart.data.datasets[0].data = history.map(d=>d.accuracy);
-  speedChart.update();
-  accChart.update();
+  if(finished && wpm>bestWpm){bestWpm=wpm; localStorage.setItem("bestWpm",bestWpm); bestEl.textContent=bestWpm;}
 }
 
-// Chart.js
 const speedChart = new Chart(document.getElementById('speedChart'), {
   type:'line',
   data:{labels:[], datasets:[{label:'WPM',data:[],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.2)',fill:true,tension:0.3}]},
@@ -234,7 +144,6 @@ const accChart = new Chart(document.getElementById('accuracyChart'), {
   options:{responsive:true,animation:{duration:0},plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:100}}}
 });
 
-// CSV download
 document.getElementById("downloadCSV").onclick = () => {
   let csv="Time,WPM,Accuracy\n";
   history.forEach((d,i)=>{csv+=`${i*0.5},${d.wpm},${d.accuracy}\n`;});
